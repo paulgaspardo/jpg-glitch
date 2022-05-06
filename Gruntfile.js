@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
 					include: 'glitcher',
 					baseUrl: 'scripts/',
 					mainConfigFile: 'scripts/glitcher.js',
-					out: 'production/glitcher.min.js',
+					out: 'build/glitcher.min.js',
 					wrap: true
 				}
 			}
@@ -22,7 +22,7 @@ module.exports = function( grunt ) {
 		cssmin: {
 			production: {
 				files: {
-					'production/glitcher.min.css': [ 'styles/glitcher.css' ]
+					'build/glitcher.min.css': [ 'styles/glitcher.css' ]
 				}
 			}
 		},
@@ -39,12 +39,12 @@ module.exports = function( grunt ) {
 					expand: true,
 					cwd: './',
 					src: 'images/icon/*.svg',
-					dest: 'production/'
+					dest: 'build/'
 				}, {
 					expand: true,
 					cwd: './',
 					src: 'images/logos/*.svg',
-					dest: 'production/'
+					dest: 'build/'
 				} ]
 			}
 		},
@@ -68,17 +68,17 @@ module.exports = function( grunt ) {
 			},
 			production: {
 				files: [
-					{ src: 'serviceworker.js', dest: 'production/serviceworker.min.js' },
-					{ src: 'scripts/workers/glitchworker.js', dest: 'production/glitchworker.min.js' },
+					{ src: 'serviceworker.js', dest: 'build/serviceworker.min.js' },
+					{ src: 'scripts/workers/glitchworker.js', dest: 'build/glitchworker.min.js' },
 					{ src: [
 						'scripts/lib/localforage.nopromises.js',
 						'scripts/lib/md5.js',
 						'scripts/workers/storageworker.js'
-					], dest: 'production/storageworker.min.js' },
+					], dest: 'build/storageworker.min.js' },
 					{ src: [
 						'scripts/lib/localforage.nopromises.js',
 						'scripts/workers/settingsworker.js'
-					], dest: 'production/settingsworker.min.js' }
+					], dest: 'build/settingsworker.min.js' }
 				]
 			}
 		},
@@ -88,24 +88,24 @@ module.exports = function( grunt ) {
 			productionTextBasedFiles: {
 				options: { processContent: updateContent },
 				files: [
-					{ src: 'index.html', dest: 'production/index.html' },
-					{ src: 'manifest.json', dest: 'production/manifest.json' },
-					{ src: '.gitignore', dest: 'production/.gitignore' },
-					{ src: 'LICENSE', dest: 'production/LICENSE' },
+					{ src: 'index.html', dest: 'build/index.html' },
+					{ src: 'manifest.json', dest: 'build/manifest.json' },
+					{ src: '.gitignore', dest: 'build/.gitignore' },
+					{ src: 'LICENSE', dest: 'build/LICENSE' },
 					{
 						expand: true,
 						cwd: './',
 						src: [ 'lang/*.json' ],
-						dest: 'production/'
+						dest: 'build/'
 					},
 					
 					// copying these files 'in place' to apply updateContent function 
 					// that updates some of the paths in the minified files
-					{ src: 'production/glitcher.min.js', dest: 'production/glitcher.min.js' },
-					{ src: 'production/serviceworker.min.js', dest: 'production/serviceworker.min.js' },
-					{ src: 'production/storageworker.min.js', dest: 'production/storageworker.min.js' },
-					{ src: 'production/settingsworker.min.js', dest: 'production/settingsworker.min.js' },
-					{ src: 'production/glitcher.min.css', dest: 'production/glitcher.min.css' }
+					{ src: 'build/glitcher.min.js', dest: 'build/glitcher.min.js' },
+					{ src: 'build/serviceworker.min.js', dest: 'build/serviceworker.min.js' },
+					{ src: 'build/storageworker.min.js', dest: 'build/storageworker.min.js' },
+					{ src: 'build/settingsworker.min.js', dest: 'build/settingsworker.min.js' },
+					{ src: 'build/glitcher.min.css', dest: 'build/glitcher.min.css' }
 				]
 			},
 			productionBinaryFiles: {
@@ -113,14 +113,14 @@ module.exports = function( grunt ) {
 					expand: true,
 					cwd: './',
 					src: [ 'images/*.jpg' ],
-					dest: 'production/'
+					dest: 'build/'
 				}, {
 					expand: true,
 					cwd: './',
 					src: [ 'images/logos/*.png' ],
-					dest: 'production/'
+					dest: 'build/'
 				},
-				{ src: 'favicon.ico', dest: 'production/favicon.ico' } ]
+				{ src: 'favicon.ico', dest: 'build/favicon.ico' } ]
 			}
 		},
 
@@ -151,7 +151,7 @@ module.exports = function( grunt ) {
 					removeScriptTypeAttributes: true
 				},
 				files: [ {
-					src: 'production/index.html', dest: 'production/index.html'
+					src: 'build/index.html', dest: 'build/index.html'
 				} ]
 			}
 		},
@@ -167,14 +167,14 @@ module.exports = function( grunt ) {
 				.replace( "scriptEl.setAttribute( 'data-main', 'scripts/glitcher.js' );", '' );
 		}
 
-		if ( path === 'production/glitcher.min.js' ) {
+		if ( path === 'build/glitcher.min.js' ) {
 			content = content
 				.replace( 'scripts/workers/glitchworker.js', 'glitchworker.min.js' )
 				.replace( 'scripts/workers/storageworker.js', 'storageworker.min.js' )
 				.replace( 'scripts/workers/settingsworker.js', 'settingsworker.min.js' );
 		}
 
-		if ( path === 'production/serviceworker.min.js' ) {
+		if ( path === 'build/serviceworker.min.js' ) {
 			content = content
 				.replace( /v\d+(.?\d*)+::/g, 'b' + Date.now() + '::' ) // 'v1.0.1::'' -> 'b{timestamp}'
 				.replace( 'styles/glitcher.css', 'glitcher.min.css' )
@@ -184,11 +184,11 @@ module.exports = function( grunt ) {
 				.replace( 'scripts/workers/settingsworker.js', 'settingsworker.min.js' );
 		}
 
-		if ( path === 'production/storageworker.min.js' || 'production/settingsworker.min.js' ) {
+		if ( path === 'build/storageworker.min.js' || 'build/settingsworker.min.js' ) {
 			content = content.replace( /,importScripts\(.*\),/, ',' ); // replaces importScripts
 		}
 
-		if ( path === 'production/glitcher.min.css' ) {
+		if ( path === 'build/glitcher.min.css' ) {
 			content = content.replace( /\.\.\/images\//gi, 'images/' ); // replaces importScripts
 		}
 

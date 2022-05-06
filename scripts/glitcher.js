@@ -4,7 +4,7 @@ requirejs.config( {
 	baseUrl: 'scripts/',
 	waitSeconds: 10,
 	paths: {
-		poppyio: '/node_modules/poppyio/amd'
+		poppyio: '../node_modules/poppyio/amd'
 	}
 } );
 
@@ -123,6 +123,7 @@ require( [
 	modalService.ModalService.getRequest().then(function (req) {
 		if (!req) {
 			indicatorView.showError("poppyio.norequest");
+			return;
 		}
 		req.open({
 			accepting: "edit-blob",

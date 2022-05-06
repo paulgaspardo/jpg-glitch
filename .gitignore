@@ -26,7 +26,7 @@ $RECYCLE.BIN/
 # build script dependencies
 node_modules/
 
-# production folder
-production/
+# build folder
+build/
 
 todo.md

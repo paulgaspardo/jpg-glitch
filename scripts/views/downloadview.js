@@ -37,7 +37,7 @@ define(
 						return;
 					}
 					doneButtonEl.disabled = done = true;
-					offer.postResult({ blob }).then(function () {
+					offer.postResult({ blob: blob }).then(function () {
 						modalService.ModalService.close();
 						if (resolve) resolve();
 					});
