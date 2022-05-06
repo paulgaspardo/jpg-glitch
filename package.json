@@ -36,5 +36,8 @@
 	"homepage": "http://snorpey.github.io/jpg-glitch/",
 	"glitch": {
 		"projectType": "generated_static"
+	},
+	"engines": {
+		"node": ">=16"
 	}
 }
