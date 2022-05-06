@@ -1,7 +1,7 @@
 /*global define*/
 define(
-	[ 'util/browser', 'util/el', 'util/time' ],
-	function ( browser, elHelper, timeHelper ) {
+	[ 'util/browser', 'util/el', 'util/time', 'poppyio/modal-service' ],
+	function ( browser, elHelper, timeHelper, modalService ) {
 		// the fullscreen button
 		// includes a lot of code to account for the different browser implementations
 		function DownloadView ( parentEl ) {
@@ -11,15 +11,64 @@ define(
 
 			var self = this;
 			var isInFullScreen = false;
-			var downloadLinkEl = elHelper.createLink(
-					'file.download',
-					'file.downloadtitle',
-					null, null,
-					'download-button',
-					parentEl
-				);
 
-				downloadLinkEl.target = '_blank';;
+			var blob;
+			var offer;
+			var resolve;
+			var done = false;
+
+			var cancelButtonEl = elHelper.createButton(
+				'poppyio.cancel',
+				'poppyio.canceltitle',
+				'cancel-button',
+				parentEl,
+				function () {
+					modalService.ModalService.close();
+				}
+			);
+
+			var doneButtonEl = elHelper.createButton(
+				'poppyio.done',
+				'poppyio.donetitle',
+				'done-button',
+				parentEl,
+				function () {
+					if (done) {
+						return;
+					}
+					doneButtonEl.disabled = done = true;
+					offer.postResult({ blob }).then(function () {
+						modalService.ModalService.close();
+						if (resolve) resolve();
+					});
+				}
+			);
+			doneButtonEl.disabled = true;
+
+			function updateDoneButtonDisabled() {
+				doneButtonEl.disabled = !blob || !offer || done;
+			}
+
+			function updateBlob ( newBlob ) {
+				blob = newBlob;
+				updateDoneButtonDisabled();
+			}
+
+			function setOffer ( newOffer, newResolve ) {
+				offer = newOffer;
+				resolve = newResolve;
+				updateDoneButtonDisabled();
+			}
+
+			// var downloadLinkEl = elHelper.createLink(
+			// 		'file.download',
+			// 		'file.downloadtitle',
+			// 		null, null,
+			// 		'download-button',
+			// 		parentEl
+			// 	);
+
+			// 	downloadLinkEl.target = '_blank';;
 
 			// the href attribute of the download link is updated every time
 			// we change a parameter
@@ -41,7 +90,9 @@ define(
 				downloadLinkEl.href = newUrl;
 			}
 			
-			self.updateDownloadLink = updateDownloadLink;
+			// self.updateDownloadLink = updateDownloadLink;
+			self.updateBlob = updateBlob;
+			self.setOffer = setOffer;
 		}
 
 		return DownloadView;

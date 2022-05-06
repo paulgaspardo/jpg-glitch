@@ -9,7 +9,7 @@ define(
 			}
 
 			var self = this;
-			var base64Url;
+			var blob;
 			var publishers = addPublishers( self,
 				'uploadstart', 'uploadend', 'uploadcomplete',
 				'removestart', 'removeend', 'removecomplete',
@@ -60,8 +60,8 @@ define(
 				console && console.log( err.message || err );
 			}
 
-			function updateUrl ( url ) {
-				base64Url = url;
+			function updateBlob ( newBlob ) {
+				blob = newBlob;
 				
 				return self;
 			}
@@ -98,7 +98,7 @@ define(
 			}
 
 			self.upload = upload;
-			self.updateUrl = updateUrl;
+			self.updateBlob = updateBlob;
 			self.remove = remove
 		}
 

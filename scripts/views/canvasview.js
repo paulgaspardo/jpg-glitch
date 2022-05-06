@@ -50,9 +50,11 @@ define(
 				panZoom.updateContainerBounds();
 			}
 
-			function createImageUrl ( callback ) {
+			function createBlob ( callback ) {
 				return function () {
-					callback( canvasEl.toDataURL( 'image/jpeg', 100 ) );
+					canvasEl.toBlob(function (blob) {
+						callback(blob);
+					}, 'image/jpeg', 100);
 				}
 			}
 			
@@ -73,7 +75,7 @@ define(
 			self.moveToCenter = panZoom.moveToCenter;
 			self.animateToCenter = panZoom.animateToCenter;
 			self.setScale = panZoom.setScale;
-			self.createImageUrl = createImageUrl;
+			self.createBlob = createBlob;
 			self.hide = hide;
 			self.show = show;
 			self.resized = panZoom.resized;

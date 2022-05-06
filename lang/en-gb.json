@@ -144,5 +144,8 @@
 			"To get started, you can drag the sliders below and glitch an image.",
 			"You can also import an image from your device. Just click on the OPEN button in the menu."
 		]
+	},
+	"poppyio": {
+		"norequest": "No request detected. Is this open in a poppy?"
 	}
 }

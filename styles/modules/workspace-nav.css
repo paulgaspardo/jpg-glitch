@@ -90,7 +90,7 @@ input.scale-slider {
 	right: 10px;
 	width: 20px;
 	overflow: hidden;
-	text-indent: -5000px;
+	/* text-indent: -5000px; */
 	width: 30px;
 	height: 30px;
 	background-image: url(../../images/icon/fullscreen.svg);
@@ -101,6 +101,17 @@ input.scale-slider {
 	cursor: pointer;
 	transition: all 0.3s ease-out;
 	opacity: 1;
+}
+
+.cancel-button {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+}
+.done-button {
+	position: absolute;
+	top: 3em;
+	right: 1em;
 }
 
 .download-button {

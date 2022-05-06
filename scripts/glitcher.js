@@ -2,7 +2,10 @@
 // gf: http://requirejs.org/docs/api.html#config
 requirejs.config( {
 	baseUrl: 'scripts/',
-	waitSeconds: 10
+	waitSeconds: 10,
+	paths: {
+		poppyio: '/node_modules/poppyio/amd'
+	}
 } );
 
 require( [
@@ -34,7 +37,8 @@ require( [
 	'models/networkmodel',
 	'models/settingsmodel',
 	'models/localisationmodel',
-	'lib/localforage.nopromises'
+	'lib/localforage.nopromises',
+	'poppyio/modal-service'
 ], function (
 	config,
 	browser,
@@ -64,7 +68,8 @@ require( [
 	NetworkModel,
 	SettingsModel,
 	LocalisationModel,
-	localforage
+	localforage,
+	modalService
 ) {
 	var wasAppLoadCompleted = false;
 
@@ -85,15 +90,15 @@ require( [
 	var controlsView = ControlsView( workspaceNavView.el, canvasControlsView.el, config.defaultControlParams );
 	var indicatorView = IndicatorView( workspaceView.el );
 	var canvasView = CanvasView( workspaceView.el, navView.el );
-	var openFileView = OpenFileView( navView.el );
-	var saveView = SaveView( navView.el );
-	var webcamView = WebCamView( navView.el );
-	var shareView = ShareView( navView.el );
+	//var openFileView = OpenFileView( navView.el );
+	//var saveView = SaveView( navView.el );
+	//var webcamView = WebCamView( navView.el );
+	//var shareView = ShareView( navView.el );
 	var settingsView = SettingsView( navView.el );
 	var aboutView = AboutView( navView.el );
-	var fullscreenView = FullscreenView( workspaceView.el );
+	// var fullscreenView = FullscreenView( workspaceView.el );
 	var downloadView = DownloadView( workspaceView.el );
-	var dragAndDropView = DragAndDropView( canvasView.el );
+	// var dragAndDropView = DragAndDropView( canvasView.el );
 	var welcomeView = WelcomeView();
 	
 	function init () {
@@ -102,18 +107,41 @@ require( [
 
 		networkModel.checkConnectivity();
 
-		if ( browser.test( 'localforage' ) && localforage ) {
-			setUpLocalForage( function () {
-				storageModel.load();
-				settingsModel.load();
-				loadInitialItem();
-			} );
-		} else {
+		// if ( browser.test( 'localforage' ) && localforage ) {
+		// 	setUpLocalForage( function () {
+		// 		storageModel.load();
+		// 		settingsModel.load();
+		// 		loadInitialItem();
+		// 	} );
+		// } else {
 			settingsModel.load();
 			controlsView.loadInitialValues();
-			loadInitialItem();
-		}
+			// loadInitialItem();
+		// }
 	}
+
+	modalService.ModalService.getRequest().then(function (req) {
+		if (!req) {
+			indicatorView.showError("poppyio.norequest");
+		}
+		req.open({
+			accepting: "edit-blob",
+			using: function (offer) {
+				return new Promise(function (resolve) {
+					downloadView.setOffer(offer, resolve);
+					if (!offer.data[0] || !(offer.data[0].blob instanceof Blob)) {
+						indicatorView.showError("poppyio.invalidmessage");
+						return;
+					}
+					imageModel.loadFromURL(URL.createObjectURL(offer.data[0].blob));
+				});
+			}
+		}).then(function (res) {
+			if (!res.matched) {
+				indicatorView.showError("poppyio.badrequest");
+			}
+		})
+	});
 
 	// hooks up all messaging between items
 	// using publisher/subscriber model
@@ -125,32 +153,32 @@ require( [
 		controlsModel
 			.on( 'update', controlsView.setValue )
 			.on( 'update', glitchModel.setValue )
-			.on( 'update', shareView.hideShareLinks );
+			// .on( 'update', shareView.hideShareLinks );
 
 		canvasControlsView
 			.on( 'center', canvasView.animateToCenter )
 			.on( 'scale', canvasView.setScale );
 
-		canvasView
-			.on( 'scale', canvasControlsView.setScale )
-			.on( 'dblclick', canvasView.animateToCenter );
+		// canvasView
+		// 	.on( 'scale', canvasControlsView.setScale )
+		// 	.on( 'dblclick', canvasView.animateToCenter );
 
-		openFileView
-			.on( 'openfile', imageModel.loadFromFile )
-			.on( 'openfromlocalstorage', storageModel.loadItem )
-			.on( 'deletefromlocalstorage', storageModel.removeLocalData )
-			.on( 'deletefromimgur', shareModel.remove );
+		// openFileView
+		// 	.on( 'openfile', imageModel.loadFromFile )
+		// 	.on( 'openfromlocalstorage', storageModel.loadItem )
+		// 	.on( 'deletefromlocalstorage', storageModel.removeLocalData )
+		// 	.on( 'deletefromimgur', shareModel.remove );
 
-		saveView
-			.on( 'savetolocalstorage', glitchModel.getImageGenerationFn( saveNewEntry ) )
-			.on( 'savetolocalstorage', updateDownloadLink )
-			.on( 'show', updateDownloadLink );
+		// saveView
+		// 	.on( 'savetolocalstorage', glitchModel.getImageGenerationFn( saveNewEntry ) )
+		// 	.on( 'savetolocalstorage', updateDownloadLink )
+		// 	.on( 'show', updateDownloadLink );
 
 		navView.on( 'toggleend', canvasView.resized );
 
 		imageModel
 			.on( 'load', glitchModel.setImageData )
-			.on( 'load', openFileView.dialog.hide )
+			// .on( 'load', openFileView.dialog.hide )
 			.on( 'load', canvasView.animateToCenter )
 			.on( 'load', canvasView.show )
 			.on( 'update', canvasView.hide )
@@ -160,31 +188,31 @@ require( [
 
 		glitchModel
 			.on( 'glitch', canvasView.putImageData )
-			.on( 'glitch', canvasView.createImageUrl( shareModel.updateUrl ) )
+			.on( 'glitch', canvasView.createBlob( downloadView.updateBlob ) )
 			.on( 'glitch', updateDownloadLink );
 
-		shareView
-			.on( 'share', shareModel.upload )
-			.on( 'deletefromimgur', shareModel.remove );
+		// shareView
+		// 	.on( 'share', shareModel.upload )
+		// 	.on( 'deletefromimgur', shareModel.remove );
 
 		shareModel
-			.on( 'uploadstart', shareView.showUpload )
-			.on( 'uploadend', shareView.hideUpload )
-			.on( 'uploadcomplete', shareView.uploadComplete )
+			// .on( 'uploadstart', shareView.showUpload )
+			// .on( 'uploadend', shareView.hideUpload )
+			// .on( 'uploadcomplete', shareView.uploadComplete )
 			.on( 'uploadcomplete', glitchModel.getImageGenerationFn( saveNewEntry ) )
 			.on( 'removecomplete', storageModel.removeImgurData )
-			.on( 'removecomplete', shareView.hideShareLinks )
+			// .on( 'removecomplete', shareView.hideShareLinks )
 			.on( 'error', indicatorView.showError )
-			.on( 'error', shareView.handleError )
+			// .on( 'error', shareView.handleError )
 			.on( 'statusmessage', indicatorView.showMessage );
 
-		webcamView
-			.on( 'video', imageModel.loadFromVideo )
-			.on( 'error', indicatorView.showError );
+		// webcamView
+		// 	.on( 'video', imageModel.loadFromVideo )
+		// 	.on( 'error', indicatorView.showError );
 
-		dragAndDropView
-			.on( 'drop', imageModel.loadFromFile )
-			.on( 'drop', canvasView.hide );
+		// dragAndDropView
+		// 	.on( 'drop', imageModel.loadFromFile )
+		// 	.on( 'drop', canvasView.hide );
 
 		welcomeView
 			.on( 'message', indicatorView.showWelcome );
@@ -196,8 +224,8 @@ require( [
 			.on( 'settingchange', settingsModel.setValue );
 
 		storageModel
-			.on( 'update', openFileView.updateList )
-			.on( 'update', shareView.updateList )
+			// .on( 'update', openFileView.updateList )
+			// .on( 'update', shareView.updateList )
 			.on( 'update', loadInitialItem )
 			.on( 'loaditem', loadEntry )
 			.on( 'statusmessage', indicatorView.showMessage )
@@ -206,8 +234,8 @@ require( [
 			.on( 'firstvisit', welcomeView.show );
 
 		networkModel
-			.on( 'connect', shareView.showOnlineOptions )
-			.on( 'disconnect', shareView.hideOnlineOptions )
+			// .on( 'connect', shareView.showOnlineOptions )
+			// .on( 'disconnect', shareView.hideOnlineOptions )
 			.on( 'connect', appView.showOnlineOptions )
 			.on( 'disconnect', appView.hideOnlineOptions );
 
@@ -325,8 +353,8 @@ require( [
 		clearTimeout( downloadLinkTimeoutId );
 
 		downloadLinkTimeoutId = setTimeout( function () {
-			glitchModel.getImageGenerationFn( saveView.updateDownloadLink, 'original' )( imageModel.getLastFileName() );
-			glitchModel.getImageGenerationFn( downloadView.updateDownloadLink, 'original' )( imageModel.getLastFileName() );
+			// glitchModel.getImageGenerationFn( saveView.updateDownloadLink, 'original' )( imageModel.getLastFileName() );
+			// glitchModel.getImageGenerationFn( downloadView.updateDownloadLink, 'original' )( imageModel.getLastFileName() );
 		}, 200 );				
 	}
 

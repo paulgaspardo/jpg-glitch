@@ -19,8 +19,7 @@ define(
 			function show () {
 				var messages = [
 					'welcome.firstvisit.0',
-					'welcome.firstvisit.1',
-					'welcome.firstvisit.2'
+					'welcome.firstvisit.1'
 				];
 
 				messages.forEach( function ( message, index ) {

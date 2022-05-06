@@ -1,6 +1,9 @@
 {
 	"name": "jpg-glitch",
 	"version": "1.0.1",
+	"dependencies": {
+		"poppyio": "https://js.poppy.io/0.0.2/poppyio-0.0.2.tgz"
+	},
 	"devDependencies": {
 		"grunt": "^1.0.1",
 		"grunt-contrib-copy": "^1.0.0",

@@ -158,5 +158,15 @@
 			"Do you think you could help other users of this app and translate some text into another language?",
 			"Please have a look at the [Translation Tool](translation.html) if you’re interested. Thank you!"
 		]
+	},
+	"poppyio": {
+		"norequest": "No request detected. Is this page open in a poppy?",
+		"badrequest": "The request is not compatible; expecting an edit-blob offer",
+		"invalidmessage": "The offer message is not valid",
+		"ok": "Everythign is good",
+		"cancel": "Cancel Editing",
+		"canceltitle": "Close and return to app",
+		"done": "Done Editing",
+		"donetitle": "Send glitched image back to app"
 	}
 }

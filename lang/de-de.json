@@ -144,5 +144,8 @@
 			"Um loszulegen, ziehe an den Reglern am unteren Fensterrand um das Bild zu bearbeiten.",
 			"Du kannst auch ein Bild importieren. Klicke dazu einfach im Menü auf ÖFFNEN."
 		]
+	},
+	"poppyio": {
+		"norequest": "No request detected. Is this open in a poppy?"
 	}
 }
