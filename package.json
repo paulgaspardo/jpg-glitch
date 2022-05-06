@@ -10,10 +10,12 @@
 		"grunt-contrib-requirejs": "^1.0.0",
 		"grunt-contrib-uglify": "^2.0.0",
 		"grunt-svgmin": "^3.3.0",
+		"http-server": "^14.1.0",
 		"poppyio": "https://js.poppy.io/0.0.3/poppyio-0.0.3.tgz"
 	},
 	"scripts": {
-		"build": "grunt"
+		"build": "grunt",
+		"start": "http-server"
 	},
 	"description": "glitch images with jpg encoding",
 	"repository": {
