@@ -11,7 +11,7 @@
 		"grunt-contrib-uglify": "^2.0.0",
 		"grunt-svgmin": "^3.3.0",
 		"http-server": "^14.1.0",
-		"poppyio": "https://js.poppy.io/0.0.3/poppyio-0.0.3.tgz"
+		"poppyio": "https://js.poppy.io/0.0.7/poppyio-0.0.7.tgz"
 	},
 	"scripts": {
 		"build": "grunt",
