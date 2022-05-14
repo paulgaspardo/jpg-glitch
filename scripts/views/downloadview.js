@@ -20,7 +20,7 @@ define(
 			var cancelButtonEl = elHelper.createButton(
 				'poppyio.cancel',
 				'poppyio.canceltitle',
-				'cancel-button',
+				'button cancel-button',
 				parentEl,
 				function () {
 					modalService.ModalService.close();
@@ -30,7 +30,7 @@ define(
 			var doneButtonEl = elHelper.createButton(
 				'poppyio.done',
 				'poppyio.donetitle',
-				'done-button',
+				'button done-button',
 				parentEl,
 				function () {
 					if (done) {

@@ -164,9 +164,9 @@
 		"badrequest": "The request is not compatible; expecting an edit-blob offer",
 		"invalidmessage": "The offer message is not valid",
 		"ok": "Everythign is good",
-		"cancel": "Cancel Editing",
+		"cancel": "Cancel",
 		"canceltitle": "Close and return to app",
-		"done": "Done Editing",
+		"done": "Done",
 		"donetitle": "Send glitched image back to app"
 	}
 }

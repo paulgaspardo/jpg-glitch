@@ -45,6 +45,8 @@ input.scale-slider {
 	border-color: rgba(0, 0, 0, 0.1);
 }
 
+	.cancel-button:hover, .done-button:hover,
+	.cancel-button:active, .done-button:active,
 	.workspace-controls .button:hover,
 	.workspace-controls .button:active {
 		border-color: rgba(0, 0, 0, 0.9);
@@ -100,18 +102,22 @@ input.scale-slider {
 	border: none;
 	cursor: pointer;
 	transition: all 0.3s ease-out;
-	opacity: 1;
+	opacity:stat 1;
 }
 
 .cancel-button {
+	color: #333;
+	border-color: rgba(0, 0, 0, 0.1);
 	position: absolute;
 	top: 1em;
 	right: 1em;
 }
 .done-button {
+	border-color: rgba(0, 0, 0, 0.1);
 	position: absolute;
-	top: 3em;
-	right: 1em;
+	color: #333;
+	top: 1em;
+	right: 8em;
 }
 
 .download-button {
